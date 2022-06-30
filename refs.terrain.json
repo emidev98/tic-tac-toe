@@ -1,0 +1,10 @@
+{
+  "localterra": {
+    "tic_tac_toe": {
+      "codeId": "13",
+      "contractAddresses": {
+        "default": "terra1n234trhxyj4ze95td2t5ngdpyqd8529urm54epum3aqg3205pcasg0g5pu"
+      }
+    }
+  }
+}

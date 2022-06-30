@@ -1,0 +1,29 @@
+{
+  "_global": {
+    "_base": {
+      "instantiation": {
+        "instantiateMsg": {
+          "count": 0
+        }
+      }
+    }
+  },
+  "mainnet": {
+    "_connection": {
+      "chainID": "phoenix-1",
+      "URL": "https://lcd.terra.dev"
+    }
+  },
+  "testnet": {
+    "_connection": {
+      "chainID": "pisco-1",
+      "URL": "https://pisco-lcd.terra.dev"
+    }
+  },
+  "localterra": {
+    "_connection": {
+      "chainID": "localterra",
+      "URL": "http://localhost:1317"
+    }
+  }
+}

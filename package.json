@@ -1,0 +1,13 @@
+{
+  "name": "tic_tac_toe",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "@terra-money/terrain": "0.4.1"
+  },
+  "workspaces": [
+    "frontend"
+  ],
+  "author": "emidev98<emilian@terra.money>",
+  "license": "ISC"
+}
