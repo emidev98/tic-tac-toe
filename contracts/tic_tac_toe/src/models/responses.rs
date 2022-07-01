@@ -2,11 +2,11 @@
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-use crate::Match;
+use crate::Game;
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct MatchResponse {
-    pub matches: Vec<Match>,
+pub struct GameResponse {
+    pub games: Vec<Game>,
     pub host: Option<String>,
     pub opponent: Option<String>
 }

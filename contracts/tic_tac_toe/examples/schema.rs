@@ -7,8 +7,8 @@ use tic_tac_toe::models::{
     InstantiateMsg, 
     ExecuteMsg, 
     QueryMsg,
-    responses::MatchResponse,
-    state::Match,
+    responses::GameResponse,
+    state::Game,
 };
 
 fn main() {
@@ -20,6 +20,6 @@ fn main() {
     export_schema(&schema_for!(InstantiateMsg), &out_dir);
     export_schema(&schema_for!(ExecuteMsg), &out_dir);
     export_schema(&schema_for!(QueryMsg), &out_dir);
-    export_schema(&schema_for!(Match), &out_dir);
-    export_schema(&schema_for!(MatchResponse), &out_dir);
+    export_schema(&schema_for!(Game), &out_dir);
+    export_schema(&schema_for!(GameResponse), &out_dir);
 }

@@ -2,23 +2,24 @@
 use cosmwasm_std::entry_point;
 use cosmwasm_std::{to_binary, Binary, Deps,Env, StdResult};
 
-use crate::models::{QueryMsg, responses::MatchResponse};
-use crate::models::state::Match;
-use crate::MATCHES;
+use crate::models::{QueryMsg, responses::GameResponse};
+use crate::models::state::Game;
+use crate::GAMES;
 use cosmwasm_std::Order;
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
         QueryMsg::Games {
-            host, 
-            opponent
-        } => to_binary(&query_games(deps, host, opponent)?),
+            host,
+            opponent,
+            completed
+        } => to_binary(&query_games(deps, host, opponent, completed)?),
     }
 }
 
-fn query_games(deps: Deps, host: Option<String>, opponent: Option<String>) -> StdResult<MatchResponse> {
-    let matches: Vec<Match>;
+fn query_games(deps: Deps, host: Option<String>, opponent: Option<String>, completed: Option<bool>) -> StdResult<GameResponse> {
+    let mut games: Vec<Game>;
     let host_address = match &host {
         Some(host_address) => {
             match deps.api.addr_validate(&host_address) {
@@ -39,38 +40,46 @@ fn query_games(deps: Deps, host: Option<String>, opponent: Option<String>) -> St
     };
 
     if host_address.is_some() && opponent_address.is_some() {
-        let match_option = MATCHES
+        let match_option = GAMES
             .may_load(deps.storage,(&host_address.unwrap(), &opponent_address.unwrap()))
             .unwrap();
 
         match match_option {
-            Some(_match) => matches = vec![_match],
-            None => matches = vec![],   
+            Some(_match) => games = vec![_match],
+            None => games = vec![],   
         }
     } 
     else if host_address.is_some() {
-        matches = MATCHES
+        games = GAMES
             .prefix(&host_address.unwrap())
             .range(deps.storage, None, None, Order::Ascending)
             .map(|f| f.unwrap().1)
             .collect();
     } 
     else if opponent_address.is_some()  {
-        matches = MATCHES
+        games = GAMES
             .prefix(&opponent_address.unwrap())
             .range(deps.storage, None, None, Order::Ascending)
             .map(|f| f.unwrap().1)
             .collect();
     } 
     else {
-        matches = MATCHES
+        games = GAMES
             .range(deps.storage, None, None, Order::Ascending)
             .map(|f| f.unwrap().1)
             .collect();
     }
-    Ok(MatchResponse {
+
+    if completed.is_some() {
+        games = games
+            .into_iter()
+            .filter(|game| game.completed == completed.unwrap())
+            .collect();
+    }
+
+    Ok(GameResponse {
         host,
         opponent,
-        matches,
+        games,
     })
 }
