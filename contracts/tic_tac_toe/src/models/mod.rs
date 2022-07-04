@@ -5,6 +5,8 @@ pub mod state;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+use self::state::{PlayerSymbol, Status, Coord};
+
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InstantiateMsg { }
@@ -12,15 +14,18 @@ pub struct InstantiateMsg { }
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    StartGame {
-        x: u8,
-        y: u8,
-        host_symbol: bool,
+    CreateGame {
+        coord: Coord,
+        host_symbol: PlayerSymbol,
         opponent: String
     },
+    AcceptGame {
+        coord: Coord,
+        host: String
+    },
     Play {
-        x: u8,
-        y: u8,
+        as_host: bool,
+        coord: Coord,
         opponent: String
     }
 }
@@ -31,7 +36,7 @@ pub enum QueryMsg {
     Games {
         host: Option<String>,
         opponent: Option<String>,
-        completed: Option<bool>
+        status: Option<Status>
     }
 }
 

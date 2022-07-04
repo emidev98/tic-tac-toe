@@ -1,11 +1,13 @@
 use cosmwasm_std::testing::{mock_dependencies, mock_env, mock_info};
-use cosmwasm_std::{coins, from_binary, Response, Addr};
+use cosmwasm_std::{coins, from_binary, Addr, Response};
 
 use crate::contract::execute::execute;
 use crate::contract::instantiate::instantiate;
 use crate::contract::query::query;
-use crate::models::errors::ContractError;
-use crate::models::{responses::GameResponse, ExecuteMsg, InstantiateMsg, QueryMsg, state::Game};
+use crate::models::{
+    errors::ContractError, responses::GameResponse, state::Coord, state::Game, state::PlayerSymbol,
+    state::Status, ExecuteMsg, InstantiateMsg, QueryMsg,
+};
 
 #[test]
 fn create_game() {
@@ -20,10 +22,9 @@ fn create_game() {
         deps.as_mut(),
         mock_env(),
         mock_info("host", &coins(2, "token")),
-        ExecuteMsg::StartGame {
-            x: 2,
-            y: 0,
-            host_symbol: true,
+        ExecuteMsg::CreateGame {
+            coord: Coord { x: 2, y: 0 },
+            host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
         },
     );
@@ -34,7 +35,7 @@ fn create_game() {
         QueryMsg::Games {
             host: Some(String::from("host")),
             opponent: Some(String::from("opponent")),
-            completed: None,
+            status: Some(Status::INVITED),
         },
     );
 
@@ -49,27 +50,28 @@ fn create_game() {
                 board: vec![
                     vec![None, None, None],
                     vec![None, None, None],
-                    vec![Some(true), None, None]
+                    vec![Some(PlayerSymbol::X), None, None]
                 ],
-                host_symbol: true,
+                player_round: PlayerSymbol::O,
+                host_symbol: PlayerSymbol::X,
                 prize: coins(2, "token"),
-                completed: false
+                status: Status::INVITED,
+                winner: None
             }]
         }
     );
     assert_eq!(
         execute_value,
         Response::new()
-            .add_attribute("method", "start_game")
+            .add_attribute("method", "create_game")
             .add_attribute("x", "2")
             .add_attribute("y", "0")
-            .add_attribute("host_symbol", "true")
+            .add_attribute("host_symbol", "X")
             .add_attribute("opponent", "opponent")
     );
 }
-
 #[test]
-fn fail_create_game_with_already_in_progress_game() {
+fn create_game_when_already_in_progress_game() {
     // GIVEN
     let mut deps = mock_dependencies();
     let msg = InstantiateMsg {};
@@ -81,21 +83,20 @@ fn fail_create_game_with_already_in_progress_game() {
         deps.as_mut(),
         mock_env(),
         mock_info("host", &coins(2, "token")),
-        ExecuteMsg::StartGame {
-            x: 2,
-            y: 0,
-            host_symbol: true,
+        ExecuteMsg::CreateGame {
+            coord: Coord { x: 2, y: 0 },
+            host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
         },
-    ).unwrap();
+    )
+    .unwrap();
     let res_x = execute(
         deps.as_mut(),
         mock_env(),
         mock_info("host", &coins(2, "token")),
-        ExecuteMsg::StartGame {
-            x: 2,
-            y: 0,
-            host_symbol: true,
+        ExecuteMsg::CreateGame {
+            coord: Coord { x: 2, y: 2 },
+            host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
         },
     );
@@ -112,7 +113,7 @@ fn fail_create_game_with_already_in_progress_game() {
 }
 
 #[test]
-fn fail_create_games_with_wrong_coordinate() {
+fn create_game_when_wrong_coordinate() {
     // GIVEN
     let mut deps = mock_dependencies();
     let msg = InstantiateMsg {};
@@ -124,10 +125,9 @@ fn fail_create_games_with_wrong_coordinate() {
         deps.as_mut(),
         mock_env(),
         mock_info("host", &coins(2, "token")),
-        ExecuteMsg::StartGame {
-            x: 3,
-            y: 0,
-            host_symbol: true,
+        ExecuteMsg::CreateGame {
+            coord: Coord { x: 3, y: 0 },
+            host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
         },
     );
@@ -136,24 +136,33 @@ fn fail_create_games_with_wrong_coordinate() {
         deps.as_mut(),
         mock_env(),
         mock_info("host", &coins(2, "token")),
-        ExecuteMsg::StartGame {
-            x: 0,
-            y: 3,
-            host_symbol: true,
+        ExecuteMsg::CreateGame {
+            coord: Coord { x: 0, y: 3 },
+            host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
         },
     );
 
     // THEN
     let value: ContractError = res_x.unwrap_err();
-    assert_eq!(value, ContractError::InvalidCoordinates { x: 3, y: 0 });
+    assert_eq!(
+        value,
+        ContractError::InvalidCoord {
+            coord: Coord { x: 3, y: 0 }
+        }
+    );
 
     let value: ContractError = res_y.unwrap_err();
-    assert_eq!(value, ContractError::InvalidCoordinates { x: 0, y: 3 });
+    assert_eq!(
+        value,
+        ContractError::InvalidCoord {
+            coord: Coord { x: 0, y: 3 }
+        }
+    );
 }
 
 #[test]
-fn fail_create_games_against_itself() {
+fn create_game_against_itself() {
     // GIVEN
     let mut deps = mock_dependencies();
     let msg = InstantiateMsg {};
@@ -165,10 +174,9 @@ fn fail_create_games_against_itself() {
         deps.as_mut(),
         mock_env(),
         mock_info("host", &coins(2, "token")),
-        ExecuteMsg::StartGame {
-            x: 0,
-            y: 0,
-            host_symbol: true,
+        ExecuteMsg::CreateGame {
+            coord: Coord { x: 0, y: 0 },
+            host_symbol: PlayerSymbol::X,
             opponent: String::from("host"),
         },
     );
@@ -176,5 +184,4 @@ fn fail_create_games_against_itself() {
     // THEN
     let value: ContractError = res_x.unwrap_err();
     assert_eq!(value, ContractError::CannotStartGame {});
-
 }
