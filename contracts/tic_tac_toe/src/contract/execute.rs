@@ -1,6 +1,6 @@
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
-use cosmwasm_std::{BankMsg, CosmosMsg, DepsMut, Env, MessageInfo, Response, SubMsg};
+use cosmwasm_std::{BankMsg, CosmosMsg, DepsMut, Env, MessageInfo, Response, SubMsg, Addr};
 
 use crate::{
     models::{
@@ -19,12 +19,13 @@ pub fn execute(
     msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
     match msg {
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord,
             host_symbol,
             opponent,
-        } => try_create_game(deps, info, coord, host_symbol, opponent),
-        ExecuteMsg::AcceptGame { coord, host } => try_accept_game(deps, info, coord, host),
+        } => try_invite(deps, info, coord, host_symbol, opponent),
+        ExecuteMsg::Reject { as_host, opponent } => try_reject(deps, info, as_host, opponent),
+        ExecuteMsg::Accept { coord, host } => try_accept(deps, info, coord, host),
         ExecuteMsg::Play {
             as_host,
             coord,
@@ -33,7 +34,7 @@ pub fn execute(
     }
 }
 
-fn try_create_game(
+fn try_invite(
     deps: DepsMut,
     info: MessageInfo,
     coord: Coord,
@@ -70,14 +71,58 @@ fn try_create_game(
     }
 
     Ok(Response::new()
-        .add_attribute("method", "create_game")
+        .add_attribute("method", "invite")
         .add_attribute("x", coord.x.to_string())
         .add_attribute("y", coord.y.to_string())
         .add_attribute("host_symbol", host_symbol.to_string())
         .add_attribute("opponent", opponent))
 }
 
-fn try_accept_game(
+fn try_reject(
+    deps: DepsMut,
+    info: MessageInfo,
+    as_host: bool,
+    opponent: String,
+) -> Result<Response, ContractError> {
+    let opponent_address = deps.api.addr_validate(&opponent)?;
+    let key: (&Addr, &Addr);
+    let refund_address: &Addr;
+    
+    if as_host {
+        key = (&info.sender, &opponent_address);
+        refund_address = &info.sender;
+    } else {
+        key = (&opponent_address, &info.sender);
+        refund_address = &opponent_address;
+    };
+
+    let game = GAMES
+        .may_load(deps.storage, key)
+        .unwrap()
+        .filter(|game| game.status == Status::INVITED);
+
+    if game.is_none() {
+        return Err(ContractError::GameNotFound {
+            host: info.sender,
+            opponent: opponent_address,
+        });
+    } else {
+        let mut game = game.unwrap();
+        game.status = Status::REJECTED;
+        GAMES.save(deps.storage, key, &game)?;
+
+        let bank_message = SubMsg::new(CosmosMsg::Bank(BankMsg::Send {
+            to_address: refund_address.to_string(),
+            amount: game.prize.clone(),
+        }));
+        Ok(Response::new()
+            .add_attribute("method", "reject")
+            .add_attribute("opponent", opponent)
+            .add_submessage(bank_message))
+    }
+}
+
+fn try_accept(
     deps: DepsMut,
     info: MessageInfo,
     coord: Coord,
@@ -112,7 +157,7 @@ fn try_accept_game(
     }
 
     Ok(Response::new()
-        .add_attribute("method", "accept_game")
+        .add_attribute("method", "accept")
         .add_attribute("x", coord.x.to_string())
         .add_attribute("y", coord.y.to_string())
         .add_attribute("opponent", host_address))
@@ -150,7 +195,9 @@ fn try_play(
         if game.already_played_on(coord) {
             return Err(ContractError::CoordinateAlreadyPlayed { coord });
         } else if game.already_played(as_host) {
-            return Err(ContractError::TurnAlreadyPlayed { second_player: opponent });
+            return Err(ContractError::TurnAlreadyPlayed {
+                second_player: opponent,
+            });
         }
 
         let game = game.play(coord);

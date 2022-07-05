@@ -10,7 +10,7 @@ use crate::models::{
 };
 
 #[test]
-fn accept_game() {
+fn accept() {
     // GIVEN
     let mut deps = mock_dependencies();
     let host_info = mock_info("host", &coins(2, "token"));
@@ -26,7 +26,7 @@ fn accept_game() {
         deps.as_mut(),
         mock_env(),
         host_info,
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -39,7 +39,7 @@ fn accept_game() {
         deps.as_mut(),
         mock_env(),
         opponent_info,
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 1, y: 1 },
             host: String::from("host"),
         },
@@ -60,7 +60,7 @@ fn accept_game() {
     assert_eq!(
         opponent_response,
         Response::new()
-            .add_attribute("method", "accept_game")
+            .add_attribute("method", "accept")
             .add_attribute("x", "1")
             .add_attribute("y", "1")
             .add_attribute("opponent", "host")
@@ -87,7 +87,7 @@ fn accept_game() {
 }
 
 #[test]
-fn accept_game_with_incorrect_host() {
+fn accept_with_incorrect_host() {
     // GIVEN
     let mut deps = mock_dependencies();
     let host_info = mock_info("host", &coins(2, "token"));
@@ -103,7 +103,7 @@ fn accept_game_with_incorrect_host() {
         deps.as_mut(),
         mock_env(),
         host_info,
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -116,7 +116,7 @@ fn accept_game_with_incorrect_host() {
         deps.as_mut(),
         mock_env(),
         opponent_info,
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 2, y: 2 },
             host: String::from("w"),
         },
@@ -133,7 +133,7 @@ fn accept_game_with_incorrect_host() {
 }
 
 #[test]
-fn accept_game_inexistent() {
+fn accept_inexistent() {
     // GIVEN
     let mut deps = mock_dependencies();
     let host_info = mock_info("host", &coins(2, "token"));
@@ -151,7 +151,7 @@ fn accept_game_inexistent() {
         deps.as_mut(),
         mock_env(),
         opponent_info,
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 1, y: 1 },
             host: String::from("host"),
         },
@@ -169,7 +169,7 @@ fn accept_game_inexistent() {
 }
 
 #[test]
-fn accept_game_with_incorrect_coord() {
+fn accept_with_incorrect_coord() {
     // GIVEN
     let mut deps = mock_dependencies();
     let host_info = mock_info("host", &coins(2, "token"));
@@ -185,7 +185,7 @@ fn accept_game_with_incorrect_coord() {
         deps.as_mut(),
         mock_env(),
         host_info,
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -198,7 +198,7 @@ fn accept_game_with_incorrect_coord() {
         deps.as_mut(),
         mock_env(),
         opponent_info,
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 5, y: 5 },
             host: String::from("host"),
         },
@@ -215,7 +215,7 @@ fn accept_game_with_incorrect_coord() {
 }
 
 #[test]
-fn accept_game_on_already_played_coords() {
+fn accept_on_already_played_coords() {
     // GIVEN
     let mut deps = mock_dependencies();
     let host_info = mock_info("host", &coins(2, "token"));
@@ -231,7 +231,7 @@ fn accept_game_on_already_played_coords() {
         deps.as_mut(),
         mock_env(),
         host_info,
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -244,7 +244,7 @@ fn accept_game_on_already_played_coords() {
         deps.as_mut(),
         mock_env(),
         opponent_info,
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 2, y: 0 },
             host: String::from("host"),
         },
@@ -261,7 +261,7 @@ fn accept_game_on_already_played_coords() {
 }
 
 #[test]
-fn accept_game_with_less_funds() {
+fn accept_with_less_funds() {
     // GIVEN
     let mut deps = mock_dependencies();
     let host_info = mock_info("host", &coins(2, "token"));
@@ -277,7 +277,7 @@ fn accept_game_with_less_funds() {
         deps.as_mut(),
         mock_env(),
         host_info,
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -290,7 +290,7 @@ fn accept_game_with_less_funds() {
         deps.as_mut(),
         mock_env(),
         opponent_info,
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 1, y: 2 },
             host: String::from("host"),
         },
@@ -302,7 +302,7 @@ fn accept_game_with_less_funds() {
 }
 
 #[test]
-fn accept_game_with_more_funds() {
+fn accept_with_more_funds() {
     // GIVEN
     let mut deps = mock_dependencies();
     let host_info = mock_info("host", &coins(2, "token"));
@@ -318,7 +318,7 @@ fn accept_game_with_more_funds() {
         deps.as_mut(),
         mock_env(),
         host_info,
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -331,7 +331,7 @@ fn accept_game_with_more_funds() {
         deps.as_mut(),
         mock_env(),
         opponent_info,
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 1, y: 2 },
             host: String::from("host"),
         },
@@ -343,7 +343,7 @@ fn accept_game_with_more_funds() {
 }
 
 #[test]
-fn accept_game_with_different_funds() {
+fn accept_with_different_funds() {
     // GIVEN
     let mut deps = mock_dependencies();
     let host_info = mock_info("host", &coins(2, "token"));
@@ -359,7 +359,7 @@ fn accept_game_with_different_funds() {
         deps.as_mut(),
         mock_env(),
         host_info,
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -372,7 +372,7 @@ fn accept_game_with_different_funds() {
         deps.as_mut(),
         mock_env(),
         opponent_info,
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 1, y: 2 },
             host: String::from("host"),
         },

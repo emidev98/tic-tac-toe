@@ -6,5 +6,13 @@
         "default": "terra1n234trhxyj4ze95td2t5ngdpyqd8529urm54epum3aqg3205pcasg0g5pu"
       }
     }
+  },
+  "testnet": {
+    "tic_tac_toe": {
+      "codeId": "1782",
+      "contractAddresses": {
+        "default": "terra1hqt76aw24yr34q7c3zkp6dumfqf7p2en4z5khsw9494z9nq7w4kqgp5gn0"
+      }
+    }
   }
 }

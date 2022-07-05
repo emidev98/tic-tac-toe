@@ -1,5 +1,5 @@
 use cosmwasm_std::testing::{mock_dependencies, mock_env, mock_info};
-use cosmwasm_std::{coins, from_binary, Addr, Response, StdError};
+use cosmwasm_std::{coins, from_binary, Addr, Response};
 
 use crate::contract::execute::execute;
 use crate::contract::instantiate::instantiate;
@@ -26,7 +26,7 @@ fn play_round() {
         deps.as_mut(),
         mock_env(),
         host_info.clone(),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -37,7 +37,7 @@ fn play_round() {
         deps.as_mut(),
         mock_env(),
         opponent_info.clone(),
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 1, y: 1 },
             host: String::from("host"),
         },
@@ -116,7 +116,7 @@ fn play_round_with_invalid_coords() {
         deps.as_mut(),
         mock_env(),
         host_info.clone(),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -127,7 +127,7 @@ fn play_round_with_invalid_coords() {
         deps.as_mut(),
         mock_env(),
         opponent_info.clone(),
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 1, y: 1 },
             host: String::from("host"),
         },
@@ -173,7 +173,7 @@ fn play_inexistent_round() {
         deps.as_mut(),
         mock_env(),
         host_info.clone(),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -184,7 +184,7 @@ fn play_inexistent_round() {
         deps.as_mut(),
         mock_env(),
         opponent_info.clone(),
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 1, y: 1 },
             host: String::from("host"),
         },
@@ -231,7 +231,7 @@ fn play_invited_round() {
         deps.as_mut(),
         mock_env(),
         host_info.clone(),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -279,7 +279,7 @@ fn play_round_on_existent_symbol() {
         deps.as_mut(),
         mock_env(),
         host_info.clone(),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -290,7 +290,7 @@ fn play_round_on_existent_symbol() {
         deps.as_mut(),
         mock_env(),
         opponent_info.clone(),
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 1, y: 1 },
             host: String::from("host"),
         },
@@ -336,7 +336,7 @@ fn play_two_rounds_as_host() {
         deps.as_mut(),
         mock_env(),
         host_info.clone(),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -347,7 +347,7 @@ fn play_two_rounds_as_host() {
         deps.as_mut(),
         mock_env(),
         opponent_info.clone(),
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 1, y: 1 },
             host: String::from("host"),
         },
@@ -405,7 +405,7 @@ fn play_two_rounds_as_opponent() {
         deps.as_mut(),
         mock_env(),
         host_info.clone(),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -416,7 +416,7 @@ fn play_two_rounds_as_opponent() {
         deps.as_mut(),
         mock_env(),
         opponent_info.clone(),
-        ExecuteMsg::AcceptGame {
+        ExecuteMsg::Accept {
             coord: Coord { x: 1, y: 1 },
             host: String::from("host"),
         },

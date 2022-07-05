@@ -2,9 +2,7 @@
   "_global": {
     "_base": {
       "instantiation": {
-        "instantiateMsg": {
-          "count": 0
-        }
+        "instantiateMsg": { }
       }
     }
   },

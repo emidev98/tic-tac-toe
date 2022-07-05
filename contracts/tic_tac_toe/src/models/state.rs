@@ -77,6 +77,7 @@ pub enum Status {
     INVITED,
     PLAYING,
     COMPLETED,
+    REJECTED,
 }
 
 impl fmt::Display for Status {
@@ -85,6 +86,7 @@ impl fmt::Display for Status {
             Status::INVITED => write!(f, "INVITED"),
             Status::PLAYING => write!(f, "PLAYING"),
             Status::COMPLETED => write!(f, "COMPLETED"),
+            Status::REJECTED => write!(f, "REJECTED"),
         }
     }
 }

@@ -14,12 +14,16 @@ pub struct InstantiateMsg { }
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    CreateGame {
+    Invite {
         coord: Coord,
         host_symbol: PlayerSymbol,
         opponent: String
     },
-    AcceptGame {
+    Reject {
+        as_host: bool,
+        opponent: String
+    },
+    Accept {
         coord: Coord,
         host: String
     },

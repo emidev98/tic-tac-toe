@@ -10,7 +10,7 @@ use crate::models::{
 };
 
 #[test]
-fn create_game() {
+fn invite() {
     // GIVEN
     let mut deps = mock_dependencies();
     let msg = InstantiateMsg {};
@@ -22,7 +22,7 @@ fn create_game() {
         deps.as_mut(),
         mock_env(),
         mock_info("host", &coins(2, "token")),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -63,7 +63,7 @@ fn create_game() {
     assert_eq!(
         execute_value,
         Response::new()
-            .add_attribute("method", "create_game")
+            .add_attribute("method", "invite")
             .add_attribute("x", "2")
             .add_attribute("y", "0")
             .add_attribute("host_symbol", "X")
@@ -71,7 +71,7 @@ fn create_game() {
     );
 }
 #[test]
-fn create_game_when_already_in_progress_game() {
+fn invite_when_already_in_progress_game() {
     // GIVEN
     let mut deps = mock_dependencies();
     let msg = InstantiateMsg {};
@@ -83,7 +83,7 @@ fn create_game_when_already_in_progress_game() {
         deps.as_mut(),
         mock_env(),
         mock_info("host", &coins(2, "token")),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -94,7 +94,7 @@ fn create_game_when_already_in_progress_game() {
         deps.as_mut(),
         mock_env(),
         mock_info("host", &coins(2, "token")),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 2, y: 2 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -113,7 +113,7 @@ fn create_game_when_already_in_progress_game() {
 }
 
 #[test]
-fn create_game_when_wrong_coordinate() {
+fn invite_when_wrong_coordinate() {
     // GIVEN
     let mut deps = mock_dependencies();
     let msg = InstantiateMsg {};
@@ -125,7 +125,7 @@ fn create_game_when_wrong_coordinate() {
         deps.as_mut(),
         mock_env(),
         mock_info("host", &coins(2, "token")),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 3, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -136,7 +136,7 @@ fn create_game_when_wrong_coordinate() {
         deps.as_mut(),
         mock_env(),
         mock_info("host", &coins(2, "token")),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 0, y: 3 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("opponent"),
@@ -162,7 +162,7 @@ fn create_game_when_wrong_coordinate() {
 }
 
 #[test]
-fn create_game_against_itself() {
+fn invite_against_itself() {
     // GIVEN
     let mut deps = mock_dependencies();
     let msg = InstantiateMsg {};
@@ -174,7 +174,7 @@ fn create_game_against_itself() {
         deps.as_mut(),
         mock_env(),
         mock_info("host", &coins(2, "token")),
-        ExecuteMsg::CreateGame {
+        ExecuteMsg::Invite {
             coord: Coord { x: 0, y: 0 },
             host_symbol: PlayerSymbol::X,
             opponent: String::from("host"),

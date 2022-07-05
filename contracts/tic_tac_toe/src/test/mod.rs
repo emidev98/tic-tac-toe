@@ -8,7 +8,10 @@ mod query_handled_errors;
 mod accept;
 
 #[cfg(test)]
-mod create;
+mod reject;
+
+#[cfg(test)]
+mod invite;
 
 #[cfg(test)]
 mod play;

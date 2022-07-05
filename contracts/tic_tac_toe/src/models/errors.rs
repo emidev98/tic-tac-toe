@@ -17,6 +17,9 @@ pub enum ContractError {
     #[error("Game between {host} and {opponent} already exists. Complete the previous game to start a new one")]
     GameAlreadyInProgress { host: Addr, opponent: Addr },
 
+    #[error("Game between {host} and {opponent} not found. You cannot reject it")]
+    GameNotFound { host: Addr, opponent: Addr },
+
     #[error("Game between {host} and {opponent} is invalid. Try starting another game.")]
     InvalidGame { host: Addr, opponent: Addr },
 
