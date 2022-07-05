@@ -1,0 +1,36 @@
+{
+    "defaultNetwork": {
+        "name": "testnet",
+        "chainID": "pisco-1",
+        "lcd": "https://pisco-lcd.terra.dev",
+        "api": "https://pisco-api.terra.dev",
+        "hive": "https://pisco-hive.terra.dev/graphql",
+        "walletconnectID": 0
+    },
+    "walletConnectChainIds": {
+        "0": {
+            "name": "testnet",
+            "chainID": "pisco-1",
+            "lcd": "https://pisco-lcd.terra.dev",
+            "api": "https://pisco-api.terra.dev",
+            "hive": "https://pisco-hive.terra.dev/graphql",
+            "walletconnectID": 0
+        },
+        "1": {
+            "name": "mainnet",
+            "chainID": "phoenix-1",
+            "lcd": "https://phoenix-lcd.terra.dev",
+            "api": "https://phoenix-api.terra.dev",
+            "hive": "https://phoenix-hive.terra.dev/graphql",
+            "walletconnectID": 1
+        },
+        "2": {
+            "name": "classic",
+            "chainID": "columbus-5",
+            "lcd": "https://columbus-lcd.terra.dev",
+            "api": "https://columbus-api.terra.dev",
+            "mantle": "https://columbus-mantle.terra.dev",
+            "walletconnectID": 2
+        }
+    }
+}
