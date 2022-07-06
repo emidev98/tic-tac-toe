@@ -1,0 +1,40 @@
+.Header {
+    justify-self: center;
+    margin: 2em;
+
+    .Menu {
+        display: flex;
+        align-items: center;
+        gap: 2em;
+
+        .MenuEntry {
+            display: flex;
+            text-decoration: none;
+            color: inherit;
+            opacity: 0.9;
+            transition: opacity 0.2s, transform 0.2s;
+
+            &:hover {
+                transform: scale(1.025);
+                opacity: 0.95;
+
+            }
+
+            &.active {
+                transform: scale(1.05);
+                opacity: 1;
+
+            }
+
+            img {
+                width: 32px;
+                height: 32px;
+            }
+
+            span {
+                font-weight: 500;
+                font-size: 1.2em;
+            }
+        }
+    }
+}

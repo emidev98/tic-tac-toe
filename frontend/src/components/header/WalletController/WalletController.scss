@@ -1,0 +1,22 @@
+.WalletController {
+
+    button {
+
+        .WalletAddress {
+            text-transform: none;
+            margin-left: 0.25em;
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+#WalletControllerMenu {
+    img {
+        width: 32px;
+        height: 32px;
+        margin-right: 0.5em;
+    }
+}

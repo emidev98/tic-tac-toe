@@ -1,0 +1,68 @@
+.GameBoard {
+    width: min-content;
+
+    .GameBody {
+
+        &.without-symbol {
+            opacity: 0.1;
+            pointer-events: none;
+
+            .GameCell:hover{
+                cursor: default;
+                background-color: transparent;
+
+            }
+
+        }
+
+        .GameRow {
+            display: flex;
+
+            &.Row0 {
+                border-bottom: 1px dashed #f9f9f9;
+
+            }
+
+            &.Row1 {
+                border-bottom: 1px dashed #f9f9f9;
+
+            }
+        }
+
+        .GameCell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            font-size: 2em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+
+            }
+
+            &.GameCellWithData {
+                cursor: default;
+                pointer-events: none;
+
+                &:hover {
+                    background-color: transparent;
+
+                }
+            }
+
+            &.Cell0 {
+                border-right: 1px dashed #f9f9f9;
+
+            }
+
+            &.Cell1 {
+                border-right: 1px dashed #f9f9f9;
+
+            }
+        }
+    }
+}

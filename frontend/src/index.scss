@@ -1,5 +1,17 @@
+@import "@fontsource/raleway/300";
 @import "@fontsource/raleway";
+@import "@fontsource/raleway/500";
 
-body {
+html {
   font-family: 'Raleway';
+  font-size: 1.1em;
+  color: #f9f9f9;
+
+  body {
+
+    #root {
+      height: 100%;
+      overflow: auto;
+    }
+  }
 }

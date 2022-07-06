@@ -10,7 +10,7 @@ const useBlockchain = () => {
     let { lcd } = useContext(BlockchainContext);
     const connectedWallet = useConnectedWallet();
 
-    const query = (games : Query): Promise<QueryResponse> => {
+    const query = (games: Query): Promise<QueryResponse> => {
         const contractAddress = getContractAddress();
 
         return lcd.wasm.contractQuery(contractAddress, { games })
@@ -19,7 +19,7 @@ const useBlockchain = () => {
     const execute = (execute: Execute) => {
         const contractAddress = getContractAddress();
 
-        if(connectedWallet){
+        if (connectedWallet) {
             return connectedWallet.post({
                 msgs: [
                     new MsgExecuteContract(

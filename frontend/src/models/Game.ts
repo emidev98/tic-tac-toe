@@ -1,5 +1,5 @@
 import { Coins } from "@terra-money/terra.js";
-import GameStatus from "./GameStatus";
+import { GameStatus } from "./GameStatus";
 import { PlayerSymbol } from "./PlayerSymbol";
 
 export interface Game {

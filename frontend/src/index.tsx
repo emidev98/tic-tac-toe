@@ -9,8 +9,6 @@ import chainOptions from 'networks.json';
 import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
 
-const root = ReactDOM.createRoot(document.getElementById("root") as Element);
-
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -19,6 +17,8 @@ const darkTheme = createTheme({
     },
   },
 });
+
+const root = ReactDOM.createRoot(document.getElementById("root") as Element);
 
 root.render(
   <React.StrictMode>

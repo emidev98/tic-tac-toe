@@ -1,0 +1,10 @@
+.App {
+    height: inherit;
+    display: grid;
+    grid-template-rows: 1fr 9fr;
+
+    .AppContent {
+        overflow: auto;
+        margin: 0 4em 1em 4em;
+    }
+}

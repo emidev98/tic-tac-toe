@@ -1,0 +1,42 @@
+.BoardHeader {
+    margin-bottom: 1.6em;
+
+    .BoardTitle {
+        text-align: center;
+
+    }
+
+    .BoardOptionsWrapper {
+        display: flex;
+        justify-content: center;
+        gap: 1.6em;
+
+        .BoardOption {
+            cursor: pointer;
+            font-size: 1.6em;
+            width: 1em;
+            text-align: center;
+            opacity: 0.9;
+            font-weight: 400;
+            border: 1px dashed transparent;
+            border-radius: 2px;
+            transition: 
+                opacity 0.2s,
+                border-color 0.2s,
+                font-weight 0.2s;
+
+
+            &:hover {
+                border-color: rgba(255, 255, 255, 0.9);
+                background-color: rgba(255,255,255,0.1);
+            }
+            
+            &.selected {
+                opacity: 1;
+                font-weight: 500;
+                border-color: white;
+                background-color: rgba(255,255,255,0.2);
+            }
+        }
+    }
+}
