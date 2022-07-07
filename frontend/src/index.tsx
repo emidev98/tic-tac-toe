@@ -4,10 +4,9 @@ import ReactDOM from "react-dom/client";
 import './index.scss';
 import { ThemeProvider } from '@emotion/react';
 import { BlockchainProvider } from 'providers/BlockchainProvider';
-import { WalletProvider } from '@terra-money/wallet-provider';
-import chainOptions from 'networks.json';
 import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
+import { SnackbarProvider } from 'notistack';
 
 const darkTheme = createTheme({
   palette: {
@@ -22,14 +21,18 @@ const root = ReactDOM.createRoot(document.getElementById("root") as Element);
 
 root.render(
   <React.StrictMode>
-    <WalletProvider {...chainOptions}>
-      <BlockchainProvider>
-        <ThemeProvider theme={darkTheme}>
+    <BlockchainProvider>
+      <ThemeProvider theme={darkTheme}>
+        <SnackbarProvider
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}>
           <BrowserRouter>
             <App />
           </BrowserRouter>
-        </ThemeProvider>
-      </BlockchainProvider>
-    </WalletProvider>
+        </SnackbarProvider>
+      </ThemeProvider>
+    </BlockchainProvider>
   </React.StrictMode>
 );

@@ -3,7 +3,7 @@
 
     .GameBody {
 
-        &.without-symbol {
+        &.NoSymbolSelected {
             opacity: 0.1;
             pointer-events: none;
 
@@ -12,19 +12,28 @@
                 background-color: transparent;
 
             }
+        }
 
+        &.DisabledGameBoard {
+            pointer-events: none;
+
+            .GameCell:hover{
+                cursor: default;
+                background-color: transparent;
+
+            }
         }
 
         .GameRow {
             display: flex;
 
             &.Row0 {
-                border-bottom: 1px dashed #f9f9f9;
+                border-bottom: 1px solid #f9f9f9;
 
             }
 
             &.Row1 {
-                border-bottom: 1px dashed #f9f9f9;
+                border-bottom: 1px solid #f9f9f9;
 
             }
         }
@@ -55,12 +64,12 @@
             }
 
             &.Cell0 {
-                border-right: 1px dashed #f9f9f9;
+                border-right: 1px solid #f9f9f9;
 
             }
 
             &.Cell1 {
-                border-right: 1px dashed #f9f9f9;
+                border-right: 1px solid #f9f9f9;
 
             }
         }

@@ -1,5 +1,6 @@
 {
     "storageVersion": 1,
+    "networkName": "testnet",
     "URL": "https://pisco-lcd.terra.dev",
     "chainID": "pisco-1",
     "isConnectedWallet": false

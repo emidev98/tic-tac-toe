@@ -1,1 +1,1 @@
-export type PlayerSymbol = 'X' | 'O' | undefined;
+export type PlayerSymbol = 'X' | 'O' | undefined | null;

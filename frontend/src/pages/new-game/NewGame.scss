@@ -1,0 +1,28 @@
+.NewGame {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    grid-template-rows: 
+        minmax(44px, auto)
+        minmax(88px, auto)
+        minmax(88px, auto)
+        minmax(88px, auto)
+        minmax(44px, auto);
+    gap: 1em;
+
+    .NewGameHeader {
+        margin: 0;
+    }
+
+    .NewGameFooter {
+        display: flex;
+        justify-content: space-between;
+        min-width: 270px;
+        margin-top: 1.6em;
+    }
+
+    .CreateNewGameButton {
+        margin-top: 1.6em;
+        width: 270px;
+    }
+}

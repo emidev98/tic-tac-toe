@@ -1,6 +1,6 @@
 .Header {
     justify-self: center;
-    margin: 2em;
+    margin: 2em 0;
 
     .Menu {
         display: flex;
@@ -11,12 +11,12 @@
             display: flex;
             text-decoration: none;
             color: inherit;
-            opacity: 0.9;
+            opacity: 0.5;
             transition: opacity 0.2s, transform 0.2s;
 
             &:hover {
                 transform: scale(1.025);
-                opacity: 0.95;
+                opacity: 0.9;
 
             }
 

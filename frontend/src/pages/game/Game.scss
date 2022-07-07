@@ -1,0 +1,22 @@
+.Game {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    gap: 1em;
+
+    .GamePrize {
+        max-width: 230px;
+        margin: 1em 0;
+    }
+
+    .GameFooter {
+        display: flex;
+        justify-content: space-between;
+        min-width: 260px;
+
+        button {
+            min-width: 120px;
+
+        }
+    }
+}

@@ -6,7 +6,10 @@ export interface Game {
     board: Array<Array<PlayerSymbol>>,
     host_symbol: PlayerSymbol,
     player_round: PlayerSymbol,
-    prize: Coins,
+    prize: [{
+        denom: string,
+        amount: string
+    }],
     status: GameStatus,
     winner?: PlayerSymbol,
 }

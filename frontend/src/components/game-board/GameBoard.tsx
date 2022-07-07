@@ -9,27 +9,35 @@ export type GameBoardProps = {
     data: Array<Array<PlayerSymbol>>,
     playerSymbol: PlayerSymbol,
     status: GameStatus,
-    onPlaySelectedPosition: (coord: Coord, playerSymbol: PlayerSymbol) => void,
+    headerTitle?: string,
+    hideHeader?: boolean,
+    disabledHeader?: boolean,
+    disabledBoard?: boolean,
+    onPlaySelectedPosition?: (coord: Coord, playerSymbol: PlayerSymbol) => void,
 };
 
 export const GameBoard = (props: GameBoardProps) => {
-    const { data, onPlaySelectedPosition, playerSymbol } = props;
+    const { data, playerSymbol, disabledBoard } = props;
     const [symbol, setSymbol] = useState(playerSymbol);
 
     const handleTryPlay = (rowIndex: number, cellIndex: number) => {
-        const selectedCoord = data[rowIndex][cellIndex];
-        console.log("selectedCoord ",selectedCoord)
-        
-        if(symbol) onPlaySelectedPosition({ y: rowIndex, x: cellIndex }, symbol);
+        if (symbol && props.onPlaySelectedPosition) {
+            const coord = { x: cellIndex, y: rowIndex };
+            props.onPlaySelectedPosition(coord, symbol);
+        }
     }
 
     return (
         <div className='GameBoard'>
-            <BoardHeader 
-                playerSymbol={symbol}
-                onSymbolSelected={setSymbol} />
+            {!props.hideHeader &&
+                <BoardHeader
+                    title={props.headerTitle}
+                    disabled={props.disabledHeader}
+                    playerSymbol={symbol}
+                    onSymbolSelected={setSymbol} />
+            }
 
-            <div className={`GameBody ${!symbol && 'without-symbol'}`}>
+            <div className={`GameBody ${(disabledBoard) && 'DisabledGameBoard'} ${!symbol && 'NoSymbolSelected'}`}>
                 {data.map((row, rowIndex) => (
                     <div className={`GameRow Row${rowIndex}`} key={rowIndex}>
 

@@ -4,19 +4,19 @@ import { PlayerSymbol } from 'models/PlayerSymbol'
 
 type BoardHeaderProps = {
   playerSymbol: PlayerSymbol,
+  title?: string,
+  disabled?: boolean,
   onSymbolSelected: (playerSymbol: PlayerSymbol) => void
 };
 
 export default function BoardHeader(props: BoardHeaderProps) {
-  const { playerSymbol, onSymbolSelected } = props;
+  const { playerSymbol, onSymbolSelected, disabled } = props;
   const isSelected = (symbol: PlayerSymbol) => symbol === playerSymbol ? 'selected' : ''
 
   return (
-    <div className='BoardHeader'>
-      {playerSymbol ?
-        <h3 className='BoardTitle'>Playing as</h3> :
-        <h3 className='BoardTitle'>Chose your symbol</h3>
-      }
+    <div className={`BoardHeader ${disabled && 'DisabledHeader'}`}>
+      {props.title && <h3 className='BoardTitle'>{props.title}</h3>}
+
       <div className='BoardOptionsWrapper'>
         <div className={'BoardOption ' + isSelected('X')}
           onClick={() => onSymbolSelected('X')}>X</div>

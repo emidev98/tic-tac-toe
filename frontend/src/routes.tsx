@@ -33,7 +33,7 @@ const useNav = () => {
 
   const routes = [
     {
-      path: '/game/:id',
+      path: '/games/:hostAddress/:opponentAddress',
       element: <Game />,
     },
 
