@@ -28,7 +28,7 @@ export const Game = () => {
     if (isHostRound) setCurrentPlayerConnected(hostAddress === connectedWalletAddress);
     else setCurrentPlayerConnected(opponentAddress === connectedWalletAddress);
 
-    setGame(games[0]);
+    setGame(Object.assign({}, games[0]));
   }
 
   useEffect(() => {
@@ -102,6 +102,7 @@ export const Game = () => {
       {game
         ? <>
           <GameBoard disabledHeader
+            hideHeader={game.status === 'COMPLETED' || game.status === 'REJECTED'}
             disabledBoard={!isCurrentPlayerConnected}
             headerTitle={isCurrentPlayerConnected ? 'Go, is your turn!' : `Next player`}
             data={game.board}

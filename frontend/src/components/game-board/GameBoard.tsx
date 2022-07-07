@@ -1,4 +1,4 @@
-import React, { RefObject, useState } from 'react';
+import React, { RefObject, useEffect, useState } from 'react';
 import './GameBoard.scss';
 import { GameStatus } from 'models/GameStatus';
 import { PlayerSymbol } from 'models/PlayerSymbol';
@@ -19,6 +19,10 @@ export type GameBoardProps = {
 export const GameBoard = (props: GameBoardProps) => {
     const { data, playerSymbol, disabledBoard } = props;
     const [symbol, setSymbol] = useState(playerSymbol);
+
+    useEffect(()=> {
+        setSymbol(playerSymbol);
+    },[playerSymbol])
 
     const handleTryPlay = (rowIndex: number, cellIndex: number) => {
         if (symbol && props.onPlaySelectedPosition) {
