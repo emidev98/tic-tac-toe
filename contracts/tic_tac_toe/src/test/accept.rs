@@ -72,9 +72,9 @@ fn accept() {
             opponent: Some(String::from("opponent")),
             games: vec![Game {
                 board: vec![
-                    vec![None, None, None],
+                    vec![None, None, Some(PlayerSymbol::X)],
                     vec![None, Some(PlayerSymbol::O), None],
-                    vec![Some(PlayerSymbol::X), None, None]
+                    vec![None, None, None]
                 ],
                 player_round: PlayerSymbol::X,
                 host_symbol: PlayerSymbol::X,

@@ -48,9 +48,9 @@ fn invite() {
             opponent: Some(String::from("opponent")),
             games: vec![Game {
                 board: vec![
+                    vec![None, None, Some(PlayerSymbol::X)],
                     vec![None, None, None],
-                    vec![None, None, None],
-                    vec![Some(PlayerSymbol::X), None, None]
+                    vec![None, None, None]
                 ],
                 player_round: PlayerSymbol::O,
                 host_symbol: PlayerSymbol::X,

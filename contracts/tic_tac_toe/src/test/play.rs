@@ -85,9 +85,9 @@ fn play_round() {
             opponent: Some(String::from("opponent")),
             games: vec![Game {
                 board: vec![
-                    vec![None, None, None],
+                    vec![None, None, Some(PlayerSymbol::X)],
                     vec![None, Some(PlayerSymbol::O), None],
-                    vec![Some(PlayerSymbol::X), None, Some(PlayerSymbol::X)]
+                    vec![None, None, Some(PlayerSymbol::X)]
                 ],
                 player_round: PlayerSymbol::O,
                 host_symbol: PlayerSymbol::X,

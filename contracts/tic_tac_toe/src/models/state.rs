@@ -108,8 +108,8 @@ impl Game {
     pub fn new(coord: Coord, prize: Vec<Coin>, host_symbol: PlayerSymbol) -> Game {
         let mut symbol_round = PlayerSymbol::O;
         let mut board = vec![vec![None; 3]; 3];
-        let x_row = board.get_mut(coord.x as usize).unwrap();
-        x_row[coord.y as usize] = Some(host_symbol);
+        let row = board.get_mut(coord.y as usize).unwrap();
+        row[coord.x as usize] = Some(host_symbol);
 
         if host_symbol == PlayerSymbol::O {
             symbol_round = PlayerSymbol::X;
@@ -128,9 +128,9 @@ impl Game {
     pub fn already_played_on(&self, coord: Coord) -> bool {
         return self
             .board
-            .get(coord.x as usize)
-            .unwrap()
             .get(coord.y as usize)
+            .unwrap()
+            .get(coord.x as usize)
             .unwrap()
             .is_some();
     }
@@ -156,8 +156,8 @@ impl Game {
     }
 
     pub fn play(&mut self, coord: Coord) -> &mut Game {
-        let x_row = self.board.get_mut(coord.x as usize).unwrap();
-        x_row[coord.y as usize] = Some(self.player_round);
+        let row = self.board.get_mut(coord.y as usize).unwrap();
+        row[coord.x as usize] = Some(self.player_round);
 
         self
     }

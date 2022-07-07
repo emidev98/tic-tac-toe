@@ -4,7 +4,7 @@ Game developed and deployed to Terra 2.0 blockchain.
 
 | Network     | Code ID     | Contract Address |
 | ----------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Testnet     |   1782      | [terra1hqt76aw24yr34q7c3zkp6dumfqf7p2en4z5khsw9494z9nq7w4kqgp5gn0](https://finder.terra.money/testnet/address/terra1hqt76aw24yr34q7c3zkp6dumfqf7p2en4z5khsw9494z9nq7w4kqgp5gn0) |
+| Testnet     |   1871      | [terra1k7px29q535hptvchfzjd4nus5wf3e8e7j7qzcwy0sq8rtcrf488qgau69w](https://finder.terra.money/testnet/address/terra1k7px29q535hptvchfzjd4nus5wf3e8e7j7qzcwy0sq8rtcrf488qgau69w) |
 
 # Smart Contract Architecture
 
