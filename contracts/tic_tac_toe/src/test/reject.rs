@@ -1,12 +1,10 @@
 use cosmwasm_std::testing::{mock_dependencies, mock_env, mock_info};
-use cosmwasm_std::{coins, from_binary, Addr, Response, SubMsg, CosmosMsg, BankMsg};
+use cosmwasm_std::{coins, Addr, Response, SubMsg, CosmosMsg, BankMsg};
 
 use crate::contract::execute::execute;
 use crate::contract::instantiate::instantiate;
-use crate::contract::query::query;
 use crate::models::{
-    errors::ContractError, responses::GameResponse, state::Coord, state::Game, state::PlayerSymbol,
-    state::Status, ExecuteMsg, InstantiateMsg, QueryMsg,
+    errors::ContractError, state::Coord, state::PlayerSymbol, ExecuteMsg, InstantiateMsg,
 };
 
 #[test]

@@ -1,1 +1,1 @@
-895d81601440d3db6e073b4a26812f538f12db6905e1d2732c7856e0054f6546  ./target/wasm32-unknown-unknown/release/tic_tac_toe.wasm
+7143ae0e303020decb6bfc1be3aa8ed3d5f7672909e4bc9a30655fda52ffa8cd  ./target/wasm32-unknown-unknown/release/tic_tac_toe.wasm

@@ -1,6 +1,6 @@
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
-use cosmwasm_std::{BankMsg, CosmosMsg, DepsMut, Env, MessageInfo, Response, SubMsg, Addr};
+use cosmwasm_std::{Addr, BankMsg, DepsMut, Env, MessageInfo, Response};
 
 use crate::{
     models::{
@@ -87,7 +87,7 @@ fn try_reject(
     let opponent_address = deps.api.addr_validate(&opponent)?;
     let key: (&Addr, &Addr);
     let refund_address: &Addr;
-    
+
     if as_host {
         key = (&info.sender, &opponent_address);
         refund_address = &info.sender;
@@ -111,14 +111,13 @@ fn try_reject(
         game.status = Status::REJECTED;
         GAMES.save(deps.storage, key, &game)?;
 
-        let bank_message = SubMsg::new(CosmosMsg::Bank(BankMsg::Send {
-            to_address: refund_address.to_string(),
-            amount: game.prize.clone(),
-        }));
         Ok(Response::new()
             .add_attribute("method", "reject")
             .add_attribute("opponent", opponent)
-            .add_submessage(bank_message))
+            .add_message(BankMsg::Send {
+                to_address: refund_address.to_string(),
+                amount: game.prize.clone(),
+            }))
     }
 }
 
@@ -218,32 +217,29 @@ fn try_play(
             .add_attribute("x", coord.x.to_string())
             .add_attribute("y", coord.y.to_string())
             .add_attribute("status", game.status.to_string())
-            .add_attribute("opponent", opponent);
+            .add_attribute("opponent", opponent.clone());
 
         if game.status == Status::COMPLETED {
             if game.winner.is_some() {
-                let winner_bank_message = SubMsg::new(CosmosMsg::Bank(BankMsg::Send {
-                    to_address: info.sender.to_string(),
-                    amount: game.prize.clone(),
-                }));
-
                 return Ok(res
                     .add_attribute("winner", game.winner.unwrap().to_string())
-                    .add_submessage(winner_bank_message));
+                    .add_message(BankMsg::Send {
+                        to_address: info.sender.to_string(),
+                        amount: game.prize.clone(),
+                    }));
             } else {
                 let prize = game.get_half_prize();
-                let host_bank_message = SubMsg::new(CosmosMsg::Bank(BankMsg::Send {
-                    to_address: info.sender.to_string(),
-                    amount: prize.clone(),
-                }));
-                let opponent_bank_message = SubMsg::new(CosmosMsg::Bank(BankMsg::Send {
-                    to_address: info.sender.to_string(),
-                    amount: prize.clone(),
-                }));
 
-                return Ok(res
-                    .add_attribute("winner", game.winner.unwrap().to_string())
-                    .add_submessages(vec![host_bank_message, opponent_bank_message]));
+                return Ok(res.add_messages(vec![
+                    BankMsg::Send {
+                        to_address: info.sender.to_string(),
+                        amount: prize.clone(),
+                    },
+                    BankMsg::Send {
+                        to_address: opponent,
+                        amount: prize.clone(),
+                    },
+                ]));
             }
         }
 

@@ -4,7 +4,7 @@ Game developed and deployed to Terra 2.0 blockchain.
 
 | Network     | Code ID     | Contract Address |
 | ----------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Testnet     |   1871      | [terra1k7px29q535hptvchfzjd4nus5wf3e8e7j7qzcwy0sq8rtcrf488qgau69w](https://finder.terra.money/testnet/address/terra1k7px29q535hptvchfzjd4nus5wf3e8e7j7qzcwy0sq8rtcrf488qgau69w) |
+| Testnet     |   1893      | [terra1xzx3p5n4e8u2h4s9jcgycz0ye4nj8p3lxs0xq2n7elm5vs3najzqcc6njr](https://finder.terra.money/testnet/address/terra1xzx3p5n4e8u2h4s9jcgycz0ye4nj8p3lxs0xq2n7elm5vs3najzqcc6njr) |
 
 # Smart Contract Architecture
 
@@ -36,24 +36,25 @@ The game only contains unit tests with the approach KISS (Keep It Simple, Stupid
 This is the last test coverage achieved with the current version of the module asserting all responses from the smart contract:
 
 ```bash
-test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
 
-Jul 05 09:45:07.325  INFO cargo_tarpaulin::report: Coverage Results:
+Jul 08 11:05:34.891  INFO cargo_tarpaulin::report: Coverage Results:
 || Uncovered Lines:
-|| src/contract/execute.rs: 61, 92-93, 206-207, 209, 224-227, 230-232, 234-237, 239-241, 244-246
+|| src/contract/execute.rs: 61, 92-93
 || src/contract/query.rs: 54, 60, 65
-|| src/models/state.rs: 70, 86, 88-89, 115, 150-152, 155, 183, 195, 202, 208, 213
+|| src/models/state.rs: 70, 86, 89, 115, 198, 211, 216
 || Tested/Total Lines:
-|| src/contract/execute.rs: 106/129 +0.00%
-|| src/contract/instantiate.rs: 2/2 +0.00%
-|| src/contract/query.rs: 38/41 +0.00%
-|| src/models/state.rs: 43/57 +0.00%
-|| src/test/accept.rs: 192/192 +0.00%
-|| src/test/invite.rs: 90/90 +0.00%
-|| src/test/play.rs: 218/218 +0.00%
-|| src/test/query_handled_errors.rs: 26/26 +0.00%
-|| src/test/query_happy_path.rs: 60/60 +0.00%
-|| src/test/reject.rs: 40/40 +0.00%
+|| src/contract/execute.rs: 122/125
+|| src/contract/instantiate.rs: 2/2
+|| src/contract/query.rs: 38/41
+|| src/models/state.rs: 51/58
+|| src/test/accept.rs: 192/192
+|| src/test/integration.rs: 153/153
+|| src/test/invite.rs: 90/90
+|| src/test/play.rs: 218/218
+|| src/test/query_handled_errors.rs: 26/26
+|| src/test/query_happy_path.rs: 60/60
+|| src/test/reject.rs: 40/40
 || 
-95.32% coverage, 815/855 lines covered, +0% change in coverage
+98.71% coverage, 992/1005 lines covered
 ```

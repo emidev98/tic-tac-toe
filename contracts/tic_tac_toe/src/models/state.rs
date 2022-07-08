@@ -148,11 +148,14 @@ impl Game {
     }
 
     pub fn get_half_prize(&self) -> Vec<Coin> {
-        for coin in self.prize.clone().iter_mut() {
-            coin.amount = coin.amount.checked_div(Uint128::new(2)).unwrap();
-        }
-
         self.prize.clone()
+            .iter_mut()
+            .map(|coin| {
+                coin.amount = coin.amount.checked_div(Uint128::new(2)).unwrap();
+                coin.clone()
+            })
+            .collect()
+        
     }
 
     pub fn play(&mut self, coord: Coord) -> &mut Game {

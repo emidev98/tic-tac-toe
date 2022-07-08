@@ -15,3 +15,6 @@ mod invite;
 
 #[cfg(test)]
 mod play;
+
+#[cfg(test)]
+mod integration;
