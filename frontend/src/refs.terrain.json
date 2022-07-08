@@ -9,9 +9,9 @@
   },
   "testnet": {
     "tic_tac_toe": {
-      "codeId": "1893",
+      "codeId": "1894",
       "contractAddresses": {
-        "default": "terra1xzx3p5n4e8u2h4s9jcgycz0ye4nj8p3lxs0xq2n7elm5vs3najzqcc6njr"
+        "default": "terra1vh2m7xmfg8wj83sj3mzd4scqcnqut9rrn49jacxfjgqdhyu96z8sm7xwga"
       }
     }
   }

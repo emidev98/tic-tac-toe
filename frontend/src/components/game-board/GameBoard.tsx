@@ -7,17 +7,18 @@ import BoardHeader from './board-header/BoardHeader';
 
 export type GameBoardProps = {
     data: Array<Array<PlayerSymbol>>,
-    playerSymbol: PlayerSymbol,
-    status: GameStatus,
+    playerSymbol?: PlayerSymbol,
+    status?: GameStatus,
     headerTitle?: string,
     hideHeader?: boolean,
     disabledHeader?: boolean,
     disabledBoard?: boolean,
+    small?: boolean,
     onPlaySelectedPosition?: (coord: Coord, playerSymbol: PlayerSymbol) => void,
 };
 
 export const GameBoard = (props: GameBoardProps) => {
-    const { data, playerSymbol, disabledBoard } = props;
+    const { data, playerSymbol, disabledBoard, small } = props;
     const [symbol, setSymbol] = useState(playerSymbol);
 
     useEffect(()=> {
@@ -32,7 +33,7 @@ export const GameBoard = (props: GameBoardProps) => {
     }
 
     return (
-        <div className='GameBoard'>
+        <div className={`GameBoard ${small && 'GameBoardSmall'}`}>
             {!props.hideHeader &&
                 <BoardHeader
                     title={props.headerTitle}

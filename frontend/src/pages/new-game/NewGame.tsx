@@ -1,5 +1,5 @@
 import './NewGame.scss';
-import React, { createRef, useState } from 'react'
+import React, { createRef, useEffect, useState } from 'react'
 import useBlockchain from 'hooks/useBlockchain';
 import { GameBoard, GameBoardProps } from 'components/game-board/GameBoard';
 import { Coord } from 'models/Coord';
@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const NewGame = () => {
   const { execute, getConnectedWalletAddress } = useBlockchain();
+  const connectedWalletAddress = getConnectedWalletAddress();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate()
   const [opponentAddress, setOpponentAddress] = useState<string>('');
@@ -37,6 +38,13 @@ export const NewGame = () => {
     }
   });
 
+  useEffect(()=>{
+    if(!connectedWalletAddress) {
+      navigate('/games');
+      enqueueSnackbar(`Connect your wallet to start a new game`);
+    }
+  },[connectedWalletAddress]);
+
   const handleCreateNewGame = async (_event: any) => {
     setLoading(true);
     const req: ExecuteInvite = { invite : {
@@ -47,7 +55,7 @@ export const NewGame = () => {
     try {
       await execute(req, amount);
       enqueueSnackbar(`Game against '${opponentAddress}' successfully created`, {variant: "success"});
-      navigate(`/games/${getConnectedWalletAddress()}/${opponentAddress}`);
+      navigate(`/games/${connectedWalletAddress}/${opponentAddress}`);
     }
     catch (e: any) {
       enqueueSnackbar(e.message, {variant: "error"});

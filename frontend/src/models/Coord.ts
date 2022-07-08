@@ -1,4 +1,5 @@
 export type Coord = {
     x: number,
-    y: number
+    y: number,
+    canModify?: boolean
 }

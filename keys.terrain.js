@@ -4,6 +4,6 @@
 module.exports = {
   test1: {
     mnemonic:
-      "shiver position copy catalog upset verify cheap library enjoy extend second peasant basic kit polar business document shrug pass chuckle lottery blind ecology stand",
+      "satisfy adjust timber high purchase tuition stool faith fine install that you unaware feed domain license impose boss human eager hat rent enjoy dawn",
   }
 };
