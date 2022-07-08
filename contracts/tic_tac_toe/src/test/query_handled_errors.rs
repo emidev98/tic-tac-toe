@@ -3,7 +3,7 @@ use cosmwasm_std::{coins, StdError};
 
 use crate::contract::instantiate::instantiate;
 use crate::contract::query::query;
-use crate::models::{InstantiateMsg, QueryMsg};
+use crate::models::{InstantiateMsg, QueryMsg, QueryKey};
 
 #[test]
 fn query_by_invalid_host() {
@@ -18,8 +18,10 @@ fn query_by_invalid_host() {
         deps.as_ref(),
         mock_env(),
         QueryMsg::Games {
-            host: Some(String::from("w")),
-            opponent: None,
+            key: Some(QueryKey {
+                host: String::from("w"),
+                opponent: String::from("opponent"),
+            }),
             status: None,
         },
     );
@@ -46,8 +48,10 @@ fn query_by_invalid_opponent() {
         deps.as_ref(),
         mock_env(),
         QueryMsg::Games {
-            host: Some(String::from("host")),
-            opponent: Some(String::from("w")),
+            key: Some(QueryKey {
+                host: String::from("host"),
+                opponent: String::from("w"),
+            }),
             status: None,
         },
     );

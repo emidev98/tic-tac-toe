@@ -40,9 +40,10 @@ pub struct Game {
 
     /**
         Determine the game status, where
-        - None: means that the game was not accepted yet,
-        - Some(false): means that the game was accepted but not yet status,
-        - Some(true): means that the game was status
+        - INVITED: only one game can be in this status at a time per host and opponent pair. This status is achieved by creating a new game and the following possible status are PLAYING or REJECTED.
+        - PLAYING: only one game can be in this status at a time per host and opponent pair. To achieve this status must mutate from INVITED.
+        - COMPLETED: multiple games can be in this status but they have to mutate from PLAYING.
+        - REJECTED: multiple games can be in this status but they have to mutate from INVITE. 
     */
     pub status: Status,
 

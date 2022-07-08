@@ -38,9 +38,14 @@ pub enum ExecuteMsg {
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
     Games {
-        host: Option<String>,
-        opponent: Option<String>,
+        key: Option<QueryKey>,
         status: Option<Status>
     }
 }
 
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct QueryKey {
+    pub host: String,
+    pub opponent: String,
+}

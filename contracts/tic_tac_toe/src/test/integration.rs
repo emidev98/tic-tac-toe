@@ -1,12 +1,12 @@
 use cosmwasm_std::testing::{mock_dependencies, mock_env, mock_info};
-use cosmwasm_std::{coins, from_binary, BankMsg, Response};
+use cosmwasm_std::{coins, from_binary, BankMsg, Response, Addr};
 
 use crate::contract::execute::execute;
 use crate::contract::instantiate::instantiate;
 use crate::contract::query::query;
 use crate::models::{
     responses::GameResponse, state::Coord, state::Game, state::PlayerSymbol,
-    state::Status, ExecuteMsg, InstantiateMsg, QueryMsg,
+    state::Status, ExecuteMsg, InstantiateMsg, QueryMsg, QueryKey
 };
 
 #[test]
@@ -128,14 +128,16 @@ fn tie() {
         deps.as_ref(),
         mock_env(),
         QueryMsg::Games {
-            host: Some(String::from("host")),
-            opponent: Some(String::from("opponent")),
+            key: Some(QueryKey {
+                host: String::from("host"),
+                opponent: String::from("opponent")
+            }),
             status: Some(Status::COMPLETED),
         },
     );
 
     // THEN
-    let query_value: GameResponse = from_binary(&res.unwrap()).unwrap();
+    let query_value: Vec<GameResponse> = from_binary(&res.unwrap()).unwrap();
     assert_eq!(
         play_res,
         Response::new()
@@ -157,10 +159,10 @@ fn tie() {
     );
     assert_eq!(
         query_value,
-        GameResponse {
-            host: Some(String::from("host")),
-            opponent: Some(String::from("opponent")),
-            games: vec![Game {
+        vec![GameResponse {
+            host: Addr::unchecked("host"),
+            opponent: Addr::unchecked("opponent"),
+            game: Game {
                 board: vec![
                     vec![Some(PlayerSymbol::X), Some(PlayerSymbol::O), Some(PlayerSymbol::X)],
                     vec![Some(PlayerSymbol::X), Some(PlayerSymbol::X), Some(PlayerSymbol::O)],
@@ -171,8 +173,8 @@ fn tie() {
                 prize: coins(4, "token"),
                 status: Status::COMPLETED,
                 winner: None
-            }]
-        }
+            }
+        }]
     );
 }
 
@@ -251,14 +253,16 @@ fn host_wins() {
         deps.as_ref(),
         mock_env(),
         QueryMsg::Games {
-            host: Some(String::from("host")),
-            opponent: Some(String::from("opponent")),
+            key : Some(QueryKey {
+                host: String::from("host"),
+                opponent: String::from("opponent")
+            }),
             status: Some(Status::COMPLETED),
         },
     );
 
     // THEN
-    let query_value: GameResponse = from_binary(&res.unwrap()).unwrap();
+    let query_value: Vec<GameResponse> = from_binary(&res.unwrap()).unwrap();
     assert_eq!(
         play_res,
         Response::new()
@@ -277,10 +281,10 @@ fn host_wins() {
     );
     assert_eq!(
         query_value,
-        GameResponse {
-            host: Some(String::from("host")),
-            opponent: Some(String::from("opponent")),
-            games: vec![Game {
+        vec![GameResponse {
+            host: Addr::unchecked("host"),
+            opponent: Addr::unchecked("opponent"),
+            game:Game {
                 board: vec![
                     vec![None, Some(PlayerSymbol::X), None], 
                     vec![None, Some(PlayerSymbol::X), None], 
@@ -291,7 +295,7 @@ fn host_wins() {
                 prize: coins(4, "token"),
                 status: Status::COMPLETED,
                 winner: Some(PlayerSymbol::X)
-            }]
-        }
+            }
+        }]
     );
 }

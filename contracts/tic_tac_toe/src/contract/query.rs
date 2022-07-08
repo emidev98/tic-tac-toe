@@ -1,83 +1,72 @@
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
-use cosmwasm_std::{to_binary, Binary, Deps,Env, StdResult};
+use cosmwasm_std::{to_binary, Binary, Deps, Env, StdResult};
 
-use crate::models::{QueryMsg, responses::GameResponse};
-use crate::models::state::{Game, Status};
+use crate::models::state::Status;
+use crate::models::QueryKey;
+use crate::models::{responses::GameResponse, QueryMsg};
 use crate::GAMES;
 use cosmwasm_std::Order;
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
-        QueryMsg::Games {
-            host,
-            opponent,
-            status
-        } => to_binary(&query_games(deps, host, opponent, status)?),
+        QueryMsg::Games { key, status } => to_binary(&query_games(deps, key, status)?),
     }
 }
 
-fn query_games(deps: Deps, host: Option<String>, opponent: Option<String>, status: Option<Status>) -> StdResult<GameResponse> {
-    let mut games: Vec<Game>;
-    let host_address = match &host {
-        Some(host_address) => {
-            match deps.api.addr_validate(&host_address) {
-                Ok(addr) => Some(addr),
-                Err(err) => return Err(err.into())
-            }
-        },
-        None => None
-    };
-    let opponent_address = match &opponent {
-        Some(opponent_address) => {
-            match deps.api.addr_validate(&opponent_address) {
-                Ok(addr) => Some(addr),
-                Err(err) => return Err(err.into())
-            }
-        },
-        None => None
-    };
+fn query_games(
+    deps: Deps,
+    key: Option<QueryKey>,
+    status: Option<Status>,
+) -> StdResult<Vec<GameResponse>> {
+    let mut res: Vec<GameResponse>;
+    
+    match key {
+        Some(addresses) => {
+            let host_address = deps.api.addr_validate(&addresses.host)?;
+            let opponent_address = deps.api.addr_validate(&addresses.opponent)?;
 
-    if host_address.is_some() && opponent_address.is_some() {
-        let match_option = GAMES.may_load(deps.storage,(&host_address.unwrap(), &opponent_address.unwrap()))
-            .unwrap();
+            let game_option = GAMES
+                .may_load(deps.storage, (&host_address, &opponent_address))
+                .unwrap();
 
-        match match_option {
-            Some(_match) => games = vec![_match],
-            None => games = vec![],   
+            match game_option {
+                Some(_game) => {
+                    res = vec![GameResponse {
+                        game: _game,
+                        host: host_address,
+                        opponent: opponent_address,
+                    }]
+                }
+                None => res = vec![],
+            }
         }
-    } 
-    else if host_address.is_some() {
-        games = GAMES.prefix(&host_address.unwrap())
-            .range(deps.storage, None, None, Order::Ascending)
-            .map(|f| f.unwrap().1)
-            .collect();
-    } 
-    else if opponent_address.is_some()  {
-        games = GAMES.prefix(&opponent_address.unwrap())
-            .range(deps.storage, None, None, Order::Ascending)
-            .map(|f| f.unwrap().1)
-            .collect();
-    } 
-    else {
-        games = GAMES.range(deps.storage, None, None, Order::Ascending)
-            .map(|f| f.unwrap().1)
-            .collect();
+        None => {
+            res = GAMES
+                .range(deps.storage, None, None, Order::Ascending)
+                .map(|f| {
+                    let (addresses, game) = f.unwrap();
+
+                    GameResponse {
+                        game: game,
+                        host: addresses.0,
+                        opponent: addresses.1,
+                    }
+                })
+                .collect();
+        }
     }
 
     match status {
         Some(status) => {
-            games = games.into_iter()
-                .filter(|game| game.status == status)
+            res = res
+                .into_iter()
+                .filter(|res| res.game.status == status)
                 .collect()
-        },
+        }
         None => {}
     }
 
-    Ok(GameResponse {
-        host,
-        opponent,
-        games,
-    })
+    Ok(res)
 }

@@ -6,7 +6,7 @@ use crate::contract::instantiate::instantiate;
 use crate::contract::query::query;
 use crate::models::{
     errors::ContractError, responses::GameResponse, state::Coord, state::Game, state::PlayerSymbol,
-    state::Status, ExecuteMsg, InstantiateMsg, QueryMsg,
+    state::Status, ExecuteMsg, InstantiateMsg, QueryMsg, QueryKey
 };
 
 #[test]
@@ -33,20 +33,22 @@ fn invite() {
         deps.as_ref(),
         mock_env(),
         QueryMsg::Games {
-            host: Some(String::from("host")),
-            opponent: Some(String::from("opponent")),
+            key: Some(QueryKey {
+                host: String::from("host"),
+                opponent: String::from("opponent")
+            }),
             status: Some(Status::INVITED),
         },
     );
 
     // THEN
-    let query_value: GameResponse = from_binary(&res.unwrap()).unwrap();
+    let query_value: Vec<GameResponse> = from_binary(&res.unwrap()).unwrap();
     assert_eq!(
         query_value,
-        GameResponse {
-            host: Some(String::from("host")),
-            opponent: Some(String::from("opponent")),
-            games: vec![Game {
+        vec![GameResponse {
+            host: Addr::unchecked("host"),
+            opponent: Addr::unchecked("opponent"),
+            game: Game {
                 board: vec![
                     vec![None, None, Some(PlayerSymbol::X)],
                     vec![None, None, None],
@@ -57,8 +59,8 @@ fn invite() {
                 prize: coins(2, "token"),
                 status: Status::INVITED,
                 winner: None
-            }]
-        }
+            }
+        }]
     );
     assert_eq!(
         execute_value,

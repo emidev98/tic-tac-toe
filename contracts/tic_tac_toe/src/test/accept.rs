@@ -6,7 +6,7 @@ use crate::contract::instantiate::instantiate;
 use crate::contract::query::query;
 use crate::models::{
     errors::ContractError, responses::GameResponse, state::Coord, state::Game, state::PlayerSymbol,
-    state::Status, ExecuteMsg, InstantiateMsg, QueryMsg,
+    state::Status, ExecuteMsg, InstantiateMsg, QueryMsg, QueryKey
 };
 
 #[test]
@@ -49,14 +49,16 @@ fn accept() {
         deps.as_ref(),
         mock_env(),
         QueryMsg::Games {
-            host: Some(String::from("host")),
-            opponent: Some(String::from("opponent")),
-            status: Some(Status::PLAYING),
+            key: Some(QueryKey {
+                host: String::from("host"),
+                opponent: String::from("opponent")
+            }),
+            status: Some(Status::PLAYING)
         },
     );
 
     // THEN
-    let query_value: GameResponse = from_binary(&res.unwrap()).unwrap();
+    let query_value: Vec<GameResponse> = from_binary(&res.unwrap()).unwrap();
     assert_eq!(
         opponent_response,
         Response::new()
@@ -67,10 +69,10 @@ fn accept() {
     );
     assert_eq!(
         query_value,
-        GameResponse {
-            host: Some(String::from("host")),
-            opponent: Some(String::from("opponent")),
-            games: vec![Game {
+        vec![GameResponse {
+            host: Addr::unchecked("host"),
+            opponent: Addr::unchecked("opponent"),
+            game: Game {
                 board: vec![
                     vec![None, None, Some(PlayerSymbol::X)],
                     vec![None, Some(PlayerSymbol::O), None],
@@ -81,8 +83,8 @@ fn accept() {
                 prize: coins(4, "token"),
                 status: Status::PLAYING,
                 winner: None
-            }]
-        }
+            }
+        }]
     );
 }
 
