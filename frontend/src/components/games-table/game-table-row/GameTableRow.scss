@@ -1,20 +1,20 @@
 td {
-    &.GameRowPreviewCell {
-        display: flex;
-        justify-content: center;
-        
-    }
-    
-    &.GameRowStatusCell {
-        
-        >div {
-            display: flex;
-            align-items: center;
-    
-            svg {
-                margin-right: 0.5em;
-    
+    &.MuiTableCell-root {
+        padding: 16px 8px;
+
+        &.GameRowStatusCell {
+
+            .GameStatus {
+                justify-content: start;
             }
+        }
+
+        &.GameRowPlayersCell {}
+
+        &.GameRowPreviewCell {
+            display: flex;
+            justify-content: center;
+
         }
     }
 }

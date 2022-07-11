@@ -2,6 +2,7 @@ import './WalletController.scss';
 import React, { useState } from 'react';
 import { Button, Menu, MenuItem } from '@mui/material';
 import { ConnectType, useWallet, WalletStatus } from '@terra-money/wallet-provider';
+import { AddressHelper } from 'helpers/Address';
 
 type WalletControllerProps = {
   className?: string
@@ -43,7 +44,9 @@ export const WalletController = ({ className }: WalletControllerProps) => {
       {status === WalletStatus.WALLET_CONNECTED && (
         <Button variant="outlined"
           onClick={() => disconnect()}>
-          <span className='WalletAddress'>{wallets[0].terraAddress}</span>
+          <span className='WalletAddress'>
+            {AddressHelper.parseAddress(wallets[0].terraAddress)}
+            </span>
         </Button>
       )}
 

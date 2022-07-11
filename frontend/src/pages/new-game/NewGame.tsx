@@ -10,6 +10,7 @@ import { useSnackbar } from "notistack";
 import { LoadingButton } from '@mui/lab';
 import { ExecuteInvite } from 'models/Execute';
 import { useNavigate } from 'react-router-dom';
+import { AddressHelper } from 'helpers/Address';
 
 export const NewGame = () => {
   const { execute, getConnectedWalletAddress } = useBlockchain();
@@ -54,7 +55,7 @@ export const NewGame = () => {
     }};
     try {
       await execute(req, amount);
-      enqueueSnackbar(`Game against '${opponentAddress}' successfully created`, {variant: "success"});
+      enqueueSnackbar(`Game against '${AddressHelper.parseAddress(opponentAddress)}' created`, {variant: "success"});
       navigate(`/games/${connectedWalletAddress}/${opponentAddress}`);
     }
     catch (e: any) {
@@ -64,7 +65,7 @@ export const NewGame = () => {
   }
 
   return (
-    <div className='NewGame'>
+    <div className={`NewGame ${loading ? 'LoadingGame' : ''}`}>
       <AddressInput value={opponentAddress} 
         label='Opponent address'
         onSetValidAddress={setOpponentAddress}/>

@@ -2,13 +2,16 @@
     display: grid;
     justify-content: center;
     justify-items: center;
-    grid-template-rows: 
-        minmax(44px, auto)
-        minmax(88px, auto)
-        minmax(88px, auto)
-        minmax(88px, auto)
-        minmax(44px, auto);
-    gap: 1em;
+
+    &.LoadingGame {
+        pointer-events: none;
+    }
+
+    .AddressInput,
+    .AmountInput {
+        margin-bottom: 1em;
+        
+    }
 
     .NewGameHeader {
         margin: 0;

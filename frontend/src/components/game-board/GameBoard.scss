@@ -1,6 +1,6 @@
 .GameBoard {
     width: min-content;
-
+    
     .GameBody {
 
         &.NoSymbolSelected {
@@ -15,6 +15,7 @@
         }
 
         &.DisabledGameBoard {
+            opacity: 1;
             pointer-events: none;
 
             .GameCell:hover{

@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import useBlockchain from 'hooks/useBlockchain';
 import { Game as GameModel } from 'models/Game';
-import { GameBoard } from 'components/game-board/GameBoard';
-import { PlayerSymbol } from 'models/PlayerSymbol';
 import { Coord } from 'models/Coord';
-import { LoadingButton } from '@mui/lab';
 import { ExecuteAccept, ExecutePlay, ExecuteReject } from 'models/Execute';
 import { useSnackbar } from 'notistack';
+import { AddressHelper } from 'helpers/Address';
+import { ReadOnlyGame } from './read-only-game/ReadOnlyGame';
+import { PlayableGame } from './playable-game/PlayableGame';
 
 export const Game = () => {
   const { hostAddress, opponentAddress } = useParams();
@@ -18,7 +18,6 @@ export const Game = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState<boolean>(false);
   const [game, setGame] = useState<GameModel | undefined>();
-  const [coord, setCoord] = useState<Coord>();
   const [isReadOnly, setReadOnly] = useState<boolean>();
 
   const init = async () => {
@@ -28,26 +27,37 @@ export const Game = () => {
         opponent: opponentAddress as string
       }
     });
+
+    if (res.length === 0) {
+      navigate('/');
+      const message = `Cannot find game '${AddressHelper.parseGameAddress(hostAddress, opponentAddress)}' on current network`;
+      return enqueueSnackbar(message, { variant: "error" });
+    }
+
     const match = res[0].game;
-    const isHostRound = match.host_symbol === match.player_round;
-
-    if (isHostRound) setReadOnly(hostAddress === connectedWalletAddress);
-    else setReadOnly(opponentAddress === connectedWalletAddress);
-
+    setViewType(match);
     setGame(Object.assign({}, match));
+  }
+
+  const setViewType = (match: GameModel) => {
+    const isGameFinished = match.status === 'REJECTED' || match.status === 'COMPLETED';
+
+    if (isGameFinished) {
+      return setReadOnly(true);
+    }
+
+    const isHostRound = match.host_symbol === match.player_round;
+    const isHostConnected = hostAddress === connectedWalletAddress;
+    const isOpponentConnected = opponentAddress === connectedWalletAddress;
+
+    if (isHostRound && isHostConnected) setReadOnly(false);
+    else if (!isHostRound && isOpponentConnected) setReadOnly(false);
+    else setReadOnly(true);
   }
 
   useEffect(() => {
     init();
   }, [connectedWalletAddress, hostAddress, opponentAddress]);
-
-  const handleSelectPosition = (coord: Coord, symbol: PlayerSymbol) => {
-    if (game && symbol) {
-      game.board[coord.y][coord.x] = symbol;
-      setGame(Object.assign({}, game));
-      setCoord(coord);
-    }
-  };
 
   const handleRejectGame = async () => {
     setLoading(true);
@@ -68,103 +78,49 @@ export const Game = () => {
     setLoading(false);
   }
 
-  const handlePlayRound = async () => {
+  const handlePlayGame = async (coord: Coord) => {
     setLoading(true);
-    const req: ExecutePlay = {
-      play: {
-        as_host: hostAddress === connectedWalletAddress,
-        coord: coord as Coord,
-        opponent: (hostAddress === connectedWalletAddress ? opponentAddress as String : hostAddress as String)
-      }
-    };
+
     try {
-      await execute(req);
-      enqueueSnackbar(`Position played. Waiting for the opponent`, { variant: "success" });
-      await init();
+      if (game?.status === 'INVITED') {
+        const req: ExecuteAccept = {
+          accept: {
+            coord: coord,
+            host: hostAddress as String
+          }
+        };
+        const amount = (Number(game?.prize[0].amount) / 10 ** 6).toString();
+        await execute(req, amount);
+        enqueueSnackbar(`Game accepted! Waiting for the opponent`, { variant: "success" });
+      }
+      else {
+        const req: ExecutePlay = {
+          play: {
+            as_host: hostAddress === connectedWalletAddress,
+            coord: coord,
+            opponent: (hostAddress === connectedWalletAddress ? opponentAddress as String : hostAddress as String)
+          }
+        };
+        await execute(req);
+        enqueueSnackbar(`Position played. Waiting for the opponent`, { variant: "success" });
+      }
     }
     catch (e: any) {
       enqueueSnackbar(e.message, { variant: "error" });
     }
+    await init();
     setLoading(false);
   }
-
-  const handleAcceptGame = async () => {
-    setLoading(true);
-    const req: ExecuteAccept = {
-      accept: {
-        coord: coord as Coord,
-        host: hostAddress as String
-      }
-    };
-    try {
-      const amount = (Number(game?.prize[0].amount) / 10 ** 6).toString();
-      await execute(req, amount);
-      enqueueSnackbar(`Game accepted! Waiting for the opponent`, { variant: "success" });
-      await init();
-    }
-    catch (e: any) {
-      enqueueSnackbar(e.message, { variant: "error" });
-    }
-    setLoading(false);
-  }
-
 
   return (
-    <div className='Game'>
-      {game
-        ? <>
-          <GameBoard disabledHeader
-            hideHeader={game.status === 'COMPLETED' || game.status === 'REJECTED'}
-            disabledBoard={!isReadOnly}
-            headerTitle={isReadOnly ? 'Go, is your turn!' : `Next player`}
-            data={game.board}
-            playerSymbol={game.player_round}
-            status={game.status}
-            onPlaySelectedPosition={handleSelectPosition} />
-
-          {isReadOnly && game.status === 'INVITED' &&
-            <>
-              <span className='GamePrize'>
-                You have been invite to play a game in value of <b> {(Number(game.prize[0].amount) / 10 ** 6)} Luna</b>
-              </span>
-              <div className='GameFooter'>
-                <LoadingButton
-                  onClick={() => handleRejectGame()}
-                  loading={loading}
-                  variant='outlined'>
-                  Reject
-                </LoadingButton>
-
-                <LoadingButton
-                  onClick={() => handleAcceptGame()}
-                  loading={loading}
-                  variant='outlined'
-                  disabled={!coord}>
-                  Accept
-                </LoadingButton>
-              </div>
-            </>
-          }
-
-          {isReadOnly && game.status === 'PLAYING' &&
-            <>
-              <span className='GamePrize'>
-                So, who's gonna win the prize <b> {(Number(game.prize[0].amount) / 10 ** 6)} Luna</b> ?
-              </span>
-              <div className='GameFooter'>
-                <LoadingButton
-                  style={{ flexGrow: 1 }}
-                  onClick={() => handlePlayRound()}
-                  loading={loading}
-                  variant='outlined'
-                  disabled={!coord}>
-                  Play
-                </LoadingButton>
-              </div>
-            </>
-          }
+    <div className={`Game ${loading ? 'LoadingGame' : ''}`}>
+      {game &&
+        <>
+          {isReadOnly
+            ? <ReadOnlyGame game={game} />
+            : <PlayableGame game={game} onPlayGame={handlePlayGame} onRejectGame={handleRejectGame} />}
         </>
-        : <div className='GameLoading'>Loading...</div>}
+      }
     </div>
   )
 }

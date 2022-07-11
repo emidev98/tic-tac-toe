@@ -2,7 +2,10 @@
     display: grid;
     justify-content: center;
     justify-items: center;
-    gap: 1em;
+
+    &.LoadingGame {
+        pointer-events: none;
+    }
 
     .GamePrize {
         max-width: 230px;
