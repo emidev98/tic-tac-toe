@@ -4,7 +4,7 @@ Game developed and deployed to Terra 2.0 blockchain.
 
 | Network     | Code ID     | Contract Address |
 | ----------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Testnet     |   1894      | [terra1vh2m7xmfg8wj83sj3mzd4scqcnqut9rrn49jacxfjgqdhyu96z8sm7xwga](https://finder.terra.money/testnet/address/terra1vh2m7xmfg8wj83sj3mzd4scqcnqut9rrn49jacxfjgqdhyu96z8sm7xwga) |
+| Testnet     |   1945      | [terra1nccc7q0x2gpa9ykhmar85rfrzd4uggzlepepw20ktt2ltp4eguuqmyxfc9](https://finder.terra.money/testnet/address/terra1nccc7q0x2gpa9ykhmar85rfrzd4uggzlepepw20ktt2ltp4eguuqmyxfc9) |
 
 # Smart Contract Architecture
 
@@ -36,26 +36,26 @@ The game only contains unit tests with the approach KISS (Keep It Simple, Stupid
 This is the last test coverage achieved with the current version of the module asserting all responses from the smart contract:
 
 ```bash
-test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
 
-Jul 08 13:59:14.990  INFO cargo_tarpaulin::report: Coverage Results:
+Jul 11 09:00:26.273  INFO cargo_tarpaulin::report: Coverage Results:
 || Uncovered Lines:
 || src/contract/execute.rs: 61, 92-93
 || src/contract/query.rs: 48-49, 51-54
-|| src/models/state.rs: 71, 87, 90, 116, 199, 212, 217
+|| src/models/state.rs: 87, 90, 116, 149, 183, 224, 229
 
 || Tested/Total Lines:
-|| src/contract/execute.rs: 122/125
-|| src/contract/instantiate.rs: 2/2
-|| src/contract/query.rs: 25/31
-|| src/models/state.rs: 51/58
+|| src/contract/execute.rs: 124/127 +97.64%
+|| src/contract/instantiate.rs: 2/2 +100.00%
+|| src/contract/query.rs: 25/31 +80.65%
+|| src/models/state.rs: 58/65 +89.23%
 || src/test/accept.rs: 193/193
-|| src/test/integration.rs: 155/155
+|| src/test/happy_paths.rs: 225/225
 || src/test/invite.rs: 91/91
 || src/test/play.rs: 219/219
 || src/test/query_handled_errors.rs: 28/28
 || src/test/query_happy_path.rs: 24/24
 || src/test/reject.rs: 40/40
 
-|| 98.34% coverage, 950/966 lines covered
+98.47% coverage, 1029/1045 lines covered
 ```

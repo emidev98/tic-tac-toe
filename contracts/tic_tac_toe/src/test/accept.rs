@@ -78,7 +78,7 @@ fn accept() {
                     vec![None, Some(PlayerSymbol::O), None],
                     vec![None, None, None]
                 ],
-                player_round: PlayerSymbol::X,
+                player_round: Some(PlayerSymbol::X),
                 host_symbol: PlayerSymbol::X,
                 prize: coins(4, "token"),
                 status: Status::PLAYING,

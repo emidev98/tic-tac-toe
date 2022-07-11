@@ -17,4 +17,4 @@ mod invite;
 mod play;
 
 #[cfg(test)]
-mod integration;
+mod happy_paths;

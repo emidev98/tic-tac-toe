@@ -28,9 +28,9 @@ pub struct Game {
     pub host_symbol: PlayerSymbol,
 
     /*
-        Semaphore to determine who's turn is next.
+        Semaphore to determine who's current and next turn.
     */
-    pub player_round: PlayerSymbol,
+    pub player_round: Option<PlayerSymbol>,
 
     /**
        Tracks the amount of coins that will have
@@ -61,7 +61,7 @@ pub struct Game {
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, JsonSchema)]
 pub enum PlayerSymbol {
     X,
-    O,
+    O
 }
 
 impl fmt::Display for PlayerSymbol {
@@ -119,7 +119,7 @@ impl Game {
         Game {
             board,
             host_symbol,
-            player_round: symbol_round,
+            player_round: Some(symbol_round),
             prize,
             status: Status::INVITED,
             winner: None,
@@ -137,7 +137,17 @@ impl Game {
     }
 
     pub fn already_played(&mut self, as_host: bool) -> bool {
-        if as_host { self.player_round != self.host_symbol } else { self.player_round == self.host_symbol}
+        match self.player_round {
+            Some(current_player_symbol) => {
+                if as_host { 
+                    return current_player_symbol != self.host_symbol 
+                } else {
+                    return current_player_symbol == self.host_symbol
+                }
+
+            }
+            None => return false,
+        }
     }
 
     pub fn double_prize(&mut self) -> &mut Game {
@@ -161,15 +171,16 @@ impl Game {
 
     pub fn play(&mut self, coord: Coord) -> &mut Game {
         let row = self.board.get_mut(coord.y as usize).unwrap();
-        row[coord.x as usize] = Some(self.player_round);
+        row[coord.x as usize] = self.player_round;
 
         self
     }
 
     pub fn finish_round(&mut self) -> &mut Game {
-        self.player_round = match self.player_round {
-            PlayerSymbol::X => PlayerSymbol::O,
-            PlayerSymbol::O => PlayerSymbol::X,
+        match self.player_round {
+            Some(PlayerSymbol::X) => self.player_round = Some(PlayerSymbol::O),
+            Some(PlayerSymbol::O) => self.player_round = Some(PlayerSymbol::X),
+            None => panic!("Invalid player round"),
         };
 
         self
@@ -189,30 +200,31 @@ impl Game {
 
     pub fn is_current_player_winner(&self) -> bool {
         macro_rules! has {
-            ($x:expr, $y:expr) => {
-                self.board[$x][$y] == Some(self.player_round)
+            ($y:expr, $x:expr) => {
+                self.board[$y][$x] == self.player_round
             };
         }
-
-        for row in 0..2 {
+        
+        // Horizontally
+        for row in 0..3 {
             if has!(row, 0) && has!(row, 1) && has!(row, 2) {
                 return true;
             }
         }
 
-        // Three in a row: vertically
-        for col in 0..2 {
+        // Vertically
+        for col in 0..3 {
             if has!(0, col) && has!(1, col) && has!(2, col) {
                 return true;
             }
         }
 
-        // Three in a row: diagonally (top-left to bottom-right)
+        // Top-left to bottom-right
         if has!(0, 0) && has!(1, 1) && has!(2, 2) {
             return true;
         }
 
-        // Three in a row: diagonally (top-right to bottom-left)
+        // Top-right to bottom-left
         if has!(0, 2) && has!(1, 1) && has!(2, 0) {
             return true;
         }

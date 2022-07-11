@@ -91,7 +91,7 @@ fn play_round() {
                     vec![None, Some(PlayerSymbol::O), None],
                     vec![None, None, Some(PlayerSymbol::X)]
                 ],
-                player_round: PlayerSymbol::O,
+                player_round: Some(PlayerSymbol::O),
                 host_symbol: PlayerSymbol::X,
                 prize: coins(4, "token"),
                 status: Status::PLAYING,

@@ -54,7 +54,7 @@ fn invite() {
                     vec![None, None, None],
                     vec![None, None, None]
                 ],
-                player_round: PlayerSymbol::O,
+                player_round: Some(PlayerSymbol::O),
                 host_symbol: PlayerSymbol::X,
                 prize: coins(2, "token"),
                 status: Status::INVITED,

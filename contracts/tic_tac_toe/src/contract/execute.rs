@@ -203,9 +203,11 @@ fn try_play(
 
         if game.is_current_player_winner() {
             game.status = Status::COMPLETED;
-            game.winner = Some(game.player_round);
+            game.winner = Some(game.player_round.unwrap());
+            game.player_round = None;
         } else if game.is_full_board() {
             game.status = Status::COMPLETED;
+            game.player_round = None;
         } else {
             game.finish_round();
         }
