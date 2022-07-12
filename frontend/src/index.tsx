@@ -25,7 +25,7 @@ root.render(
       <ThemeProvider theme={darkTheme}>
         <SnackbarProvider
           anchorOrigin={{
-            vertical: 'top',
+            vertical: 'bottom',
             horizontal: 'right'
           }}>
           <BrowserRouter>

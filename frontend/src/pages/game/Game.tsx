@@ -114,13 +114,15 @@ export const Game = () => {
 
   return (
     <div className={`Game ${loading ? 'LoadingGame' : ''}`}>
-      {game &&
-        <>
+      {game
+        ? <>
           {isReadOnly
             ? <ReadOnlyGame game={game} />
             : <PlayableGame game={game} onPlayGame={handlePlayGame} onRejectGame={handleRejectGame} />}
         </>
+        : <div>Loading...</div>
       }
+
     </div>
   )
 }

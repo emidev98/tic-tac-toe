@@ -34,10 +34,12 @@ export const GameTableRow = (props: GameTableRowProps) => {
                     disabledBoard
                     small />
             </TableCell>
-            <TableCell>
+            <TableCell className='GameRowDetailsCell'>
                 <Button variant='outlined'
-                    endIcon={<ArrowForwardIosIcon />}
-                    onClick={()=> props.onGoToDetails(props.data)}>DETAILS</Button>
+                    onClick={()=> props.onGoToDetails(props.data)}>
+                        <span className='GameRowButtonText'>DETAILS</span>
+                        <ArrowForwardIosIcon />
+                    </Button>
             </TableCell>
         </>
     )

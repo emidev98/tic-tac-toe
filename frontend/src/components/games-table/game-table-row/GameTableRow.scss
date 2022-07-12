@@ -9,12 +9,32 @@ td {
             }
         }
 
-        &.GameRowPlayersCell {}
+        @media only screen and (max-width: 720px) {
+
+            .GameStatusText {
+                display: none;
+            }
+        }
 
         &.GameRowPreviewCell {
             display: flex;
             justify-content: center;
 
+
+            @media only screen and (max-width: 720px) {
+                display: none;
+            }
+        }
+
+        @media only screen and (max-width: 720px) {
+
+            &.GameRowDetailsCell {
+
+                .GameRowButtonText {
+
+                    display: none;
+                }
+            }
         }
     }
 }

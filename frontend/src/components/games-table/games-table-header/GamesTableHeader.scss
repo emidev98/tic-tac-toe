@@ -8,6 +8,10 @@
 
     .GamePreviewCell {
         width: 100px;
+
+        @media only screen and (max-width: 720px) {
+            display: none;
+        }
     }
 
     .GameActionsCell {

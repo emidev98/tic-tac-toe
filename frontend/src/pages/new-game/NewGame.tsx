@@ -30,7 +30,7 @@ export const NewGame = () => {
     headerTitle: "Chose your symbol",
     disabledHeader: false,
     playerSymbol: undefined,
-    status: undefined,
+    status: 'INVITED',
     onPlaySelectedPosition: (coord: Coord, playerSymbol: PlayerSymbol) => {
       gameBoard.data[coord.y][coord.x] = playerSymbol;
       gameBoard.playerSymbol = playerSymbol;

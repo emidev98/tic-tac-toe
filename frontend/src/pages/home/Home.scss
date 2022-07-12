@@ -1,0 +1,49 @@
+.Home {
+    display: grid;
+    justify-items: center;
+    height: 100%;
+    grid-template-rows: auto auto auto 1fr;
+
+    .HomeHeader {
+        display: flex;
+        align-items: baseline;
+        text-align: center;
+        
+        h2, h3 {
+            padding: 0 2em;
+            margin-bottom: 0;
+            font-weight: 300;
+        }
+
+        span {
+            border-bottom: 1px solid white;
+        }
+    }
+
+    .HomeRules {
+        list-style: none;
+
+        li {
+            margin-bottom: 0.25em;
+        }
+    }
+
+
+    .HomeFooter {
+        display: flex;
+        align-items: flex-end;
+        gap: 1em;
+        margin: 2em;
+
+        a {
+            display: flex;
+            align-items: center;
+            text-transform: none;
+            color: #f9f9f9;
+
+            svg {
+                margin-right: 0.25em;
+            }
+        }
+    }
+}

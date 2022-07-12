@@ -42,6 +42,7 @@ export const PlayableGame = (props: PlayableGameProps) => {
             <GameBoard disabledHeader
                 headerTitle={game.status === 'INVITED' ? 'You have been invited to play' : 'Your turn to play'}
                 data={game.board}
+                status={game.status}
                 playerSymbol={game.player_round}
                 onPlaySelectedPosition={handlePlaySelectedPosition} />
 

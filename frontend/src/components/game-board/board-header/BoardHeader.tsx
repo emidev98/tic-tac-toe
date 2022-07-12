@@ -21,7 +21,7 @@ export default function BoardHeader(props: BoardHeaderProps) {
         <h3 className='BoardTitle'>{props.title}</h3>
       }
 
-      {gameStatus === 'COMPLETED' || gameStatus === 'INVITED' && <>
+      {(gameStatus === 'INVITED' || gameStatus === 'PLAYING') && <>
         <div className='BoardOptionsWrapper'>
           <div className={'BoardOption ' + isSelected('X')}
             onClick={() => onSymbolSelected('X')}>

@@ -17,7 +17,7 @@ export const GameStatus = (props: GameStatusProps) => {
             {props.status === 'COMPLETED' && <DoneIcon />}
             {props.status === 'PLAYING' && <RotateLeftIcon />}
             {props.status === 'REJECTED' && <CloseIcon />}
-            <span>{props.status}</span>
+            <span className='GameStatusText'>{props.status}</span>
         </div>
     )
 }

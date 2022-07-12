@@ -9,7 +9,6 @@ export type GameBoardProps = {
     data: Array<Array<PlayerSymbol>>,
     playerSymbol?: PlayerSymbol,
     status?: GameStatus,
-    prize?: string,
     winner?: PlayerSymbol,
     headerTitle?: string,
     hideHeader?: boolean,
@@ -20,7 +19,7 @@ export type GameBoardProps = {
 };
 
 export const GameBoard = (props: GameBoardProps) => {
-    const { data, playerSymbol, disabledBoard, small, status, prize} = props;
+    const { data, playerSymbol, disabledBoard, small, status} = props;
     const [symbol, setSymbol] = useState(playerSymbol);
 
     useEffect(()=> {
