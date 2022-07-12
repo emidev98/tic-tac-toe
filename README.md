@@ -1,6 +1,8 @@
 # Tic Tac Toe
 
-Game developed and deployed to Terra 2.0 blockchain. 
+Game developed and deployed to Terra 2.0 blockchain. The game is played on a 3x3 grid. The player who has the first three in a row wins.
+
+Website deployed to [tic-tac-toe.decentryfi.xyz](http://tic-tac-toe.decentryfi.xyz/);
 
 | Network     | Code ID     | Contract Address |
 | ----------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
